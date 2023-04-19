@@ -54,14 +54,15 @@
             const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
             const isDark = currentTheme === 'dark';
             const pagebody = document.getElementsByTagName('body')[0]
+            const mobiletoggle = document.getElementById("mobile-toggle-theme")
             if (isDark) {
                 pagebody.classList.add('dark-theme');
                 // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+                mobiletoggle && (mobiletoggle.innerText = "· Dark")
             } else {
                 pagebody.classList.remove('dark-theme');
                 // mobile
-                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+                mobiletoggle && (mobiletoggle.innerText = "· Light")
             }
         })();
     </script>
@@ -151,12 +152,14 @@
 </div>
 
             </div>
-            <footer id="footer" class="footer">
+            
+              <footer id="footer" class="footer">
     <div class="copyright">
         <span>© JenkinWoo</span>
     </div>
 </footer>
 
+            
     </div>
 </body>
 

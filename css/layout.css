@@ -29,9 +29,11 @@
 .main .container {
   padding-left: 1em;
   padding-right: 1em;
+  padding-top: 6em;
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: start;
   flex: 1;
 }
 .footer {
