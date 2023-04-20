@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="JenkinWoo">
+
+
+    <meta name="subtitle" content="JenkinWoo">
+
+
+    <meta name="description" content="JenkinWoo">
+
+
+    <meta name="keywords" content="JenkinWoo, 前端">
+
+
+<title>Vue 面试题详解答 | JenkinWoo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/cursorHeart.min.js"></script>
+    
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            const mobiletoggle = document.getElementById("mobile-toggle-theme")
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Dark")
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Light")
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JenkinWoo&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JenkinWoo&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+  
+    
+      <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">跳转最后</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? "展开全部" : "全部收缩";
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+        
+          
+            <article class="post-wrap">
+              <header class="post-header">
+                <h1 class="post-title">
+                  Vue 面试题详解答
+                </h1>
+              </header>
+
+              <div class="post-content">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文整理了高频出现的 Vue 相关面试题并且附带详解答案 难度分为<code>简单</code> <code>中等</code> <code>困难</code> 三种类型;</p>
+<h2 id="简单"><a href="#简单" class="headerlink" title="简单"></a>简单</h2><h3 id="1-为什么-data-是一个函数"><a href="#1-为什么-data-是一个函数" class="headerlink" title="1. 为什么 data 是一个函数"></a>1. 为什么 data 是一个函数</h3><p>组件中的 data 写成一个函数，数据以函数返回值形式定义，这样每复用一次组件，就会返回一份新的 data，类似于给每个组件实例创建一个私有的数据空间，让各个组件实例维护各自的数据。而单纯的写成对象形式，就使得所有组件实例共用了一份 data，就会造成一个变了全都会变的结果</p>
+<h3 id="2-Vue-组件通讯有哪几种方式"><a href="#2-Vue-组件通讯有哪几种方式" class="headerlink" title="2. Vue 组件通讯有哪几种方式"></a>2. Vue 组件通讯有哪几种方式</h3><ul>
+<li><p>props 和$emit 父组件向子组件传递数据是通过 prop 传递的，子组件传递数据给父组件是通过$emit 触发事件来做到的</p>
+</li>
+<li><p>$parent,$children 获取当前组件的父组件和当前组件的子组件</p>
+</li>
+<li><p>$attrs 和$listeners A-&gt;B-&gt;C。Vue 2.4 开始提供了$attrs 和$listeners 来解决这个问题</p>
+</li>
+<li><p>父组件中通过 provide 来提供变量，然后在子组件中通过 inject 来注入变量。(官方不推荐在实际业务中使用，但是写组件库时很常用)</p>
+</li>
+<li><p>$refs 获取组件实例</p>
+</li>
+<li><p>eventBus 兄弟组件数据传递 这种情况下可以使用事件总线的方式</p>
+</li>
+<li><p>vuex 状态管理</p>
+</li>
+</ul>
+<h3 id="3-谈谈对vue生命周期的理解？"><a href="#3-谈谈对vue生命周期的理解？" class="headerlink" title="3. 谈谈对vue生命周期的理解？"></a>3. 谈谈对vue生命周期的理解？</h3><p>每个<code>Vue</code>实例在创建时都会经过一系列的初始化过程，<code>vue</code>的生命周期钩子，就是说在达到某一阶段或条件时去触发的函数，目的就是为了完成一些动作或者事件</p>
+<ul>
+<li><code>beforeCreate</code> 在实例初始化之后，数据观测(data observer) 和 event&#x2F;watcher 事件配置之前被调用。在当前阶段 data、methods、computed 以及 watch 上的数据和方法都不能被访问</li>
+<li><code>created</code> 实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，属性和方法的运算， watch&#x2F;event 事件回调。这里没有$el,如果非要想与 Dom 进行交互，可以通过 vm.$nextTick 来访问 Dom</li>
+<li><code>beforeMount</code> 在挂载开始之前被调用：相关的 render 函数首次被调用。</li>
+<li><code>mounted</code> 在挂载完成后发生，在当前阶段，真实的 Dom 挂载完毕，数据完成双向绑定，可以访问到 Dom 节点</li>
+<li><code>beforeUpdate</code> 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁（patch）之前。可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程</li>
+<li><code>updated</code> 发生在更新完成之后，当前阶段组件 Dom 已完成更新。要注意的是避免在此期间更改数据，因为这可能会导致无限循环的更新，该钩子在服务器端渲染期间不被调用。</li>
+<li><code>beforeDestroy</code> 实例销毁之前调用。在这一步，实例仍然完全可用。我们可以在这时进行善后收尾工作，比如清除计时器。</li>
+<li><code>destroyed</code> Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。 该钩子在服务器端渲染期间不被调用。</li>
+<li><code>activated</code> keep-alive 专属，组件被激活时调用</li>
+<li><code>deactivated</code> keep-alive 专属，组件被销毁时调用</li>
+</ul>
+<blockquote>
+<p>常见的数据请求在哪一步发起？</p>
+<blockquote>
+<p>可以在钩子函数 created、beforeMount、mounted 中进行异步请求，因为在这三个钩子函数中，data 已经创建，可以将服务端端返回的数据进行赋值。<br>如果异步请求不需要依赖 Dom 推荐在 created 钩子函数中调用异步请求，因为在 created 钩子函数中调用异步请求有以下优点：<br>能更快获取到服务端数据，减少页面  loading 时间；<br>SSR 不支持 beforeMount 、mounted 钩子函数，所以放在 created 中有助于一致性；</p>
+</blockquote>
+</blockquote>
+<h3 id="4-v-if-和-v-show-的区别"><a href="#4-v-if-和-v-show-的区别" class="headerlink" title="4. v-if 和 v-show 的区别?"></a>4. v-if 和 v-show 的区别?</h3><p>v-if 在编译过程中会被转化成三元表达式,条件不满足时不渲染此节点。<br>v-show 会被编译成指令，条件不满足时控制样式将对应节点隐藏 （display:none）</p>
+<blockquote>
+<p>扩展补充：display:none、visibility: hidden 和 opacity: 0 之间的区别？<br>三者都是隐藏元素，从四个角度说明不同点：</p>
+<ul>
+<li>是否占据空间</li>
+</ul>
+<blockquote>
+<p>display: none; 隐藏之后不占位置；visibility: hidden 和 opacity: 0 隐藏后会占据位置;</p>
+</blockquote>
+<ul>
+<li>子元素是否继承</li>
+</ul>
+<blockquote>
+<p>display: none 不会被子元素继承，父元素隐藏后是从页面视图消失，所以子元素也跟着隐藏了；<br>visibility: hidden 会被继承，可以通过子元素 visibility: visible 来显示资源数；<br>opacity: 0 会被继承，但不能设置子元素来重新显示；</p>
+</blockquote>
+<ul>
+<li>事件绑定</li>
+</ul>
+<blockquote>
+<p>display: none; 和 visibility:hidden  隐藏之后 不能触发它绑定的事件；<br>opacity: 0 元素上的事件是可以被触发的；</p>
+</blockquote>
+<ul>
+<li>过滤动画</li>
+</ul>
+<blockquote>
+<p>display: none; 和 visibility:hidden 使用transition 是无效的;<br>opacity:0 使用transition 是有效的，类似过度效果;</p>
+</blockquote>
+</blockquote>
+<h3 id="5-computed-和-watch-的区别和运用的场景"><a href="#5-computed-和-watch-的区别和运用的场景" class="headerlink" title="5. computed 和 watch 的区别和运用的场景"></a>5. computed 和 watch 的区别和运用的场景</h3><p><code>watch 属性监听</code><br>是一个对象，键是需要观察的属性，值是对应回调函数，主要用来监听某些特定数据的变化，从而进行某些具体的业务逻辑操作,监听属性的变化，需要在数据变化时执行异步或开销较大的操作时使用<br><code>computed 计算属性</code><br>属性的结果会被缓存，当computed中的函数所依赖的属性没有发生改变的时候，那么调用当前函数的时候结果会从缓存中读取。除非依赖的响应式属性变化时才会重新计算，主要当做属性来使用computed中的函数必须用return返回最终的结果computed更高效，优先使用</p>
+<p><code>使用场景</code></p>
+<ul>
+<li>computed：当一个属性受多个属性影响的时候使用，例：购物车商品结算功能</li>
+<li>watch：当一条数据影响多条数据的时候使用，例：搜索数据</li>
+</ul>
+<h3 id="6-v-if-与-v-for-为什么不建议一起使用"><a href="#6-v-if-与-v-for-为什么不建议一起使用" class="headerlink" title="6. v-if 与 v-for 为什么不建议一起使用"></a>6. v-if 与 v-for 为什么不建议一起使用</h3><ul>
+<li>key的作用主要是为了更高效的对比虚拟DOM中每个节点是否是相同节点;</li>
+<li>Vue在patch过程中判断两个节点是否是相同节点,key是一个必要条件，渲染一组列表时，key往往是唯一标识，所以如果不定义key的话，Vue只能认为比较的两个节点是同一个，哪怕它们实际上不是，这导致了频繁更新元素，使得整个patch过程比较低效，影响性能;</li>
+<li>从源码中可以知道，Vue判断两个节点是否相同时主要判断两者的key和元素类型等，因此如果不设置key,它的值就是undefined，则可能永    远认为这是两个相同的节点，只能去做更新操作，这造成了大量的dom更新操作，明显是不可取的。</li>
+</ul>
+<h2 id="中等"><a href="#中等" class="headerlink" title="中等"></a>中等</h2><h3 id="7-Vue2-0-双向绑定实现原理"><a href="#7-Vue2-0-双向绑定实现原理" class="headerlink" title="7. Vue2.0 双向绑定实现原理"></a>7. Vue2.0 双向绑定实现原理</h3><p>当一个<code>Vue</code>实例创建时，Vue会遍历data选项的属性，用 <code>Object.defineProperty</code> 将它们转为 getter&#x2F;setter并且在内部追踪相关依赖，在属性被访问和修改时通知变化。每个组件实例都有相应的 watcher 程序实例，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的 setter 被调用时，会通知 watcher重新计算，从而致使它关联的组件得以更新。</p>
+<p>相关代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Observer</span> &#123;</span><br><span class="line">  <span class="comment">// 观测值</span></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">value</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">walk</span>(value);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">walk</span>(<span class="params">data</span>) &#123;</span><br><span class="line">    <span class="comment">// 对象上的所有属性依次进行观测</span></span><br><span class="line">    <span class="keyword">let</span> keys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(data);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; keys.<span class="property">length</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">let</span> key = keys[i];</span><br><span class="line">      <span class="keyword">let</span> value = data[key];</span><br><span class="line">      <span class="title function_">defineReactive</span>(data, key, value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Object.defineProperty数据劫持核心 兼容性在ie9以及以上</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">defineReactive</span>(<span class="params">data, key, value</span>) &#123;</span><br><span class="line">  <span class="title function_">observe</span>(value); <span class="comment">// 递归关键</span></span><br><span class="line">  <span class="comment">// --如果value还是一个对象会继续走一遍odefineReactive 层层遍历一直到value不是对象才停止</span></span><br><span class="line">  <span class="comment">//   思考？如果Vue数据嵌套层级过深 &gt;&gt;性能会受影响</span></span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(data, key, &#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;获取值&quot;</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//需要做依赖收集过程 这里代码没写出来</span></span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">newValue</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (newValue === value) <span class="keyword">return</span>;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;设置值&quot;</span>);</span><br><span class="line">      <span class="comment">//需要做派发更新过程 这里代码没写出来</span></span><br><span class="line">      value = newValue;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">observe</span>(<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="comment">// 如果传过来的是对象或者数组 进行属性劫持</span></span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(value) === <span class="string">&quot;[object Object]&quot;</span> ||</span><br><span class="line">    <span class="title class_">Array</span>.<span class="title function_">isArray</span>(value)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Observer</span>(value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-Vue3-0-和-2-0-的响应式原理区别"><a href="#8-Vue3-0-和-2-0-的响应式原理区别" class="headerlink" title="8. Vue3.0 和 2.0 的响应式原理区别"></a>8. Vue3.0 和 2.0 的响应式原理区别</h3><p>Vue3.x 改用 Proxy 替代 Object.defineProperty。因为 Proxy 可以直接监听对象和数组的变化，并且有多达 13 种拦截方法。</p>
+<p>相关代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mutableHandlers &#125; <span class="keyword">from</span> <span class="string">&quot;./baseHandlers&quot;</span>; <span class="comment">// 代理相关逻辑</span></span><br><span class="line"><span class="keyword">import</span> &#123; isObject &#125; <span class="keyword">from</span> <span class="string">&quot;./util&quot;</span>; <span class="comment">// 工具方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">target</span>) &#123;</span><br><span class="line">  <span class="comment">// 根据不同参数创建不同响应式对象</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createReactiveObject</span>(target, mutableHandlers);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params">target, baseHandler</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isObject</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> observed = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, baseHandler);</span><br><span class="line">  <span class="keyword">return</span> observed;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> get = <span class="title function_">createGetter</span>();</span><br><span class="line"><span class="keyword">const</span> set = <span class="title function_">createSetter</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createGetter</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">get</span>(<span class="params">target, key, receiver</span>) &#123;</span><br><span class="line">    <span class="comment">// 对获取的值进行放射</span></span><br><span class="line">    <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;属性获取&quot;</span>, key);</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isObject</span>(res)) &#123;</span><br><span class="line">      <span class="comment">// 如果获取的值是对象类型，则返回当前对象的代理对象</span></span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">reactive</span>(res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createSetter</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> oldValue = target[key];</span><br><span class="line">    <span class="keyword">const</span> hadKey = <span class="title function_">hasOwn</span>(target, key);</span><br><span class="line">    <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver);</span><br><span class="line">    <span class="keyword">if</span> (!hadKey) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;属性新增&quot;</span>, key, value);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="title function_">hasChanged</span>(value, oldValue)) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;属性值被修改&quot;</span>, key, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mutableHandlers = &#123;</span><br><span class="line">  get, <span class="comment">// 当获取属性时调用此方法</span></span><br><span class="line">  set, <span class="comment">// 当修改属性时调用此方法</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-v-model的实现以及它的实现原理吗？"><a href="#9-v-model的实现以及它的实现原理吗？" class="headerlink" title="9. v-model的实现以及它的实现原理吗？"></a>9. v-model的实现以及它的实现原理吗？</h3><ul>
+<li>vue中双向绑定是一个指令v-model，可以绑定一个动态值到视图，同时视图中变化能改变该值。v-model是语法糖，默认情况下相于:value和@input。</li>
+<li>使用v-model可以减少大量繁琐的事件处理代码，提高开发效率，代码可读性也更好</li>
+<li>通常在表单项上使用v-model</li>
+<li>原生的表单项可以直接使用v-model，自定义组件上如果要使用它需要在组件内绑定value并处理输入事件</li>
+<li>输出包含v-model模板的组件渲染函数，发现它会被转换为value属性的绑定以及一个事件监听，事件回调函数中会做相应变量更新操作，这说明神奇魔法实际上是vue的编译器完成的。</li>
+</ul>
+<h3 id="10-虚拟-DOM-是什么-有什么优缺点"><a href="#10-虚拟-DOM-是什么-有什么优缺点" class="headerlink" title="10.虚拟 DOM 是什么 有什么优缺点"></a>10.虚拟 DOM 是什么 有什么优缺点</h3><p>由于在浏览器中操作 DOM 是很昂贵的。频繁的操作 DOM，会产生一定的性能问题。这就是虚拟 Dom 的产生原因。Vue2 的 Virtual DOM 借鉴了开源库 snabbdom 的实现。Virtual DOM 本质就是用一个原生的 JS 对象去描述一个 DOM 节点，是对真实 DOM 的一层抽象。</p>
+<ul>
+<li><p>优点：</p>
+<ol>
+<li><p>保证性能下限： 框架的虚拟 DOM 需要适配任何上层 API 可能产生的操作，它的一些 DOM 操作的实现必须是普适的，所以它的性能并不是最优的；但是比起粗暴的 DOM 操作性能要好很多，因此框架的虚拟 DOM 至少可以保证在你不需要手动优化的情况下，依然可以提供还不错的性能，即保证性能的下限；</p>
+</li>
+<li><p>无需手动操作 DOM： 我们不再需要手动去操作 DOM，只需要写好 View-Model 的代码逻辑，框架会根据虚拟 DOM 和 数据双向绑定，帮我们以可预期的方式更新视图，极大提高我们的开发效率；</p>
+</li>
+<li><p>跨平台： 虚拟 DOM 本质上是 JavaScript 对象,而 DOM 与平台强相关，相比之下虚拟 DOM 可以进行更方便地跨平台操作，例如服务器渲染、weex 开发等等。</p>
+</li>
+</ol>
+</li>
+<li><p>缺点:</p>
+<ol>
+<li><p>无法进行极致优化： 虽然虚拟 DOM + 合理的优化，足以应对绝大部分应用的性能需求，但在一些性能要求极高的应用中虚拟 DOM 无法进行针对性的极致优化。</p>
+</li>
+<li><p>首次渲染大量 DOM 时，由于多了一层虚拟 DOM 的计算，会比 innerHTML 插入慢。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="困难"><a href="#困难" class="headerlink" title="困难"></a>困难</h2>
+              </div>
+
+              
+                <section class="post-copyright">
+                  
+                    <p class="copyright-item">
+                      <span>
+                        作者:
+                      </span>
+                      <span>JenkinWoo</span>
+                    </p>
+                  
+                     
+                  
+                    <p class="copyright-item">
+                      <span>
+                        日期:
+                      </span>
+                      <span>04/20, 2023&nbsp;&nbsp;17:36:26</span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        分类:
+                      </span>
+                      <span>
+                        
+                          <a href="/categories/Vue/">Vue</a>
+                          
+                      </span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        归档:
+                      </span>
+                      <span><a href="https://www.2ms.cc/664b9fe50f01.html">https://www.2ms.cc/664b9fe50f01.html</a></span>
+                    </p>
+                  
+                </section>
+              
+                <section class="post-tags">
+                  <div>
+                    <span>Tag(s):</span>
+                    <span class="tag">
+                      
+                        
+                          <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"># 面试题</a>
+                        
+                          <a href="/tags/Vue/"># Vue</a>
+                        
+                      
+                    </span>
+                  </div>
+                  <div>
+                    <a href="javascript:window.history.back();">back</a>
+                    <span>· </span>
+                    <a href="/">home</a>
+                  </div>
+                </section>
+                <section class="post-nav">
+                  
+                  
+                    <a class="next" rel="next" href="/4ee428246460.html">Hexo 使用攻略</a>
+                  
+                </section>
+            </article>
+</div>
+            </div>
+            
+              <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© JenkinWoo</span>
+    </div>
+</footer>
+
+            
+    </div>
+</body>
+
+</html>
