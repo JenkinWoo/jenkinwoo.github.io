@@ -315,7 +315,96 @@
 </ol>
 </li>
 </ul>
-<h2 id="困难"><a href="#困难" class="headerlink" title="困难"></a>困难</h2>
+<h3 id="11-谈一下对-vuex-的个人理解"><a href="#11-谈一下对-vuex-的个人理解" class="headerlink" title="11. 谈一下对 vuex 的个人理解"></a>11. 谈一下对 vuex 的个人理解</h3><p>vuex 是专门为 vue 提供的全局状态管理系统，用于多个组件中数据共享、数据缓存等。（无法持久化、内部核心原理是通过创造一个全局实例 new Vue）<br>主要包括以下几个模块：</p>
+<ul>
+<li><code>State</code>：定义了应用状态的数据结构，可以在这里设置默认的初始状态。</li>
+<li><code>Getter</code>：允许组件从 Store 中获取数据，mapGetters 辅助函数仅仅是将 store 中的 getter 映射到局部计算属性。</li>
+<li><code>Mutation</code>：是唯一更改 store 中状态的方法，且必须是同步函数。</li>
+<li><code>Action</code>：用于提交 mutation，而不是直接变更状态，可以包含任意异步操作。</li>
+<li><code>Module</code>：允许将单一的 Store 拆分为多个 store 且同时保存在单一的状态树中。</li>
+</ul>
+<h3 id="12-Vuex-页面刷新数据丢失怎么解决"><a href="#12-Vuex-页面刷新数据丢失怎么解决" class="headerlink" title="12. Vuex 页面刷新数据丢失怎么解决"></a>12. Vuex 页面刷新数据丢失怎么解决</h3><p>需要做 vuex 数据持久化 一般使用本地存储的方案来保存数据 可以自己设计存储方案 也直接将状态保存至 cookie 或者 localStorage 中</p>
+<h3 id="13-Vuex-为什么要分模块并且加命名空间"><a href="#13-Vuex-为什么要分模块并且加命名空间" class="headerlink" title="13. Vuex 为什么要分模块并且加命名空间"></a>13. Vuex 为什么要分模块并且加命名空间</h3><p><code>模块</code>: 由于使用单一状态树，应用的所有状态会集中到一个比较大的对象。当应用变得非常复杂时，store 对象就有可能变得相当臃肿。为了解决以上问题，Vuex 允许我们将 store 分割成模块（module）。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块。</p>
+<p><code>命名空间</code>：默认情况下，模块内部的 action、mutation 和 getter 是注册在全局命名空间的——这样使得多个模块能够对同一 mutation 或 action 作出响应。如果希望你的模块具有更高的封装度和复用性，你可以通过添加 namespaced: true 的方式使其成为带命名空间的模块。当模块被注册后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名。</p>
+<h3 id="14-路由原理-history-和-hash-两种路由方式的特点"><a href="#14-路由原理-history-和-hash-两种路由方式的特点" class="headerlink" title="14. 路由原理 history 和 hash 两种路由方式的特点"></a>14. 路由原理 history 和 hash 两种路由方式的特点</h3><p><code>hash 模式</code>:</p>
+<ul>
+<li><p>location.hash 的值实际就是 URL 中#后面的东西 它的特点在于：hash 虽然出现 URL 中，但不会被包含在 HTTP 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面。</p>
+</li>
+<li><p>可以为 hash 的改变添加监听事件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;hashchange&quot;</span>, funcRef, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>每一次改变 hash（window.location.hash），都会在浏览器的访问历史中增加一个记录利用 hash 的以上特点，就可以来实现前端路由“更新视图但不重新请求页面”的功能了</p>
+<p><code>history 模式</code>:<br>利用了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法,来实现无需刷新页面就可以改变URL并且能够在浏览器历史记录中进行前进和后退操作, 在当前已有的 back、forward、go 的基础之上，它们提供了对历史记录进行修改的功能。这两个方法有个共同的特点：当调用他们修改浏览器历史记录栈后，虽然当前 URL 改变了，但浏览器不会刷新页面，这就为单页应用前端路由“更新视图但不重新请求页面”提供了基础, 但是history也是有缺点的，不怕前进后退跳转，就怕刷新（如果后端没有准备的话），因为刷新是实实在在地去请求服务器了, 需要正确的配置以避免出现404错误。。</p>
+<p><code>abstract 模式</code>：<br>abstract 是vue路由中的第三种模式，本身是用来在不支持浏览器API的环境中，而不论是hash还是history模式都会对浏览器上的url产生作用，本文要实现的功能就是在已存在的路由页面中内嵌其他的路由页面，而保持在浏览器当中依旧显示当前页面的路由path，这就利用到了abstract这种与浏览器分离的路由模式。</p>
+<h3 id="15-Vue-修饰符有哪些"><a href="#15-Vue-修饰符有哪些" class="headerlink" title="15. Vue 修饰符有哪些 ?"></a>15. Vue 修饰符有哪些 ?</h3><p><code>事件修饰符</code>:用于控制事件的行为和触发条件</p>
+<ul>
+<li>.stop 阻止事件继续传播</li>
+<li>.prevent 阻止标签默认行为</li>
+<li>.capture 使用事件捕获模式,即元素自身触发的事件先在此处处理，然后才交由内部元素进行处理</li>
+<li>.self 只当在 event.target 是当前元素自身时触发处理函数</li>
+<li>.once 事件将只会触发一次</li>
+<li>.passive 告诉浏览器你不想阻止事件的默认行为</li>
+</ul>
+<p><code>v-model 的修饰符</code>: 用于增强其功能和控制其行为</p>
+<ul>
+<li>.lazy：将输入事件转换为 change 事件，即在元素失去焦点或按下回车键时更新绑定值。</li>
+<li>.number：自动将用户的输入转换为数字类型。</li>
+<li>.trim：自动过滤用户输入的首尾空白字符。</li>
+</ul>
+<p><code>键盘事件的修饰符</code>:键盘事件的修饰符用于监听特定的键盘事件</p>
+<ul>
+<li>.enter：回车键。</li>
+<li>.tab：Tab 键。</li>
+<li>.delete：删除或后退键。</li>
+<li>.esc：Esc 键。</li>
+<li>.space：空格键。</li>
+<li>.up：上箭头键。</li>
+<li>.down：下箭头键。</li>
+<li>.left：左箭头键。</li>
+<li>.right：右箭头键。</li>
+</ul>
+<p><code>系统修饰键</code>:用于监听按下特定的系统键盘组合键事件</p>
+<ul>
+<li>.ctrl：Ctrl 键。</li>
+<li>.alt：Alt 键。</li>
+<li>.shift：Shift 键。</li>
+<li>.meta：Meta 键（Windows 上是 Windows 键，Mac 上是 Command 键）。</li>
+</ul>
+<p><code>鼠标按钮修饰符</code>: 鼠标按钮修饰符用于监听特定的鼠标按钮事件</p>
+<ul>
+<li>.left：左键（主键）。</li>
+<li>.right：右键。</li>
+<li>.middle：中键。</li>
+</ul>
+<h2 id="困难"><a href="#困难" class="headerlink" title="困难"></a>困难</h2><h3 id="16-Vue-nextTick-原理"><a href="#16-Vue-nextTick-原理" class="headerlink" title="16. Vue.nextTick()原理"></a>16. Vue.nextTick()原理</h3><p>在 Vue.js 中，Vue.nextTick() 方法用于在 DOM 更新之后执行回调函数。通常情况下，当更新DOM时，Vue.js 会将DOM操作异步化处理，并且会在下一次事件循环中批量处理，以提高性能和效率。这意味着，在更新DOM后立即访问DOM节点可能会失败或返回不正确的结果。为了解决这个问题，可以使用 Vue.nextTick() 方法来确保DOM已经更新并准备好操作。</p>
+<p>实际上，Vue.nextTick() 方法内部是通过创建一个异步任务队列来实现的。每当需要更新DOM时，Vue.js 会将更新操作插入到异步任务队列中，并且会在下一次事件循环中批量处理这些更新操作。而 Vue.nextTick() 方法就是等待所有异步任务完成后才执行回调函数的方法。</p>
+<p>更具体地说，Vue.nextTick() 方法会检查当前是否存在微任务（Promise 或 MutationObserver），如果存在，则使用微任务来延迟回调函数执行；否则，会创建一个新的 Promise 对象，并使用它来延迟回调函数执行。由于 Promise 的 then() 方法会在下一次微任务中执行，因此在 Promise 执行完毕后，回调函数就会在下一个事件循环中被调用。</p>
+<p>总之，Vue.nextTick() 方法是Vue.js用于在DOM更新后执行回调函数的一种机制，其内部使用异步任务队列和微任务来实现。通过调用 Vue.nextTick() 方法，可以确保DOM已经更新并准备好操作，从而避免了访问DOM节点时出现的问题。</p>
+<p>相关代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/util/next-tick.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> callbacks = [];</span><br><span class="line"><span class="keyword">let</span> pending = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">flushCallbacks</span>(<span class="params"></span>) &#123;</span><br><span class="line">  pending = <span class="literal">false</span>; <span class="comment">//把标志还原为false</span></span><br><span class="line">  <span class="comment">// 依次执行回调</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; callbacks.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    callbacks[i]();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> timerFunc; <span class="comment">//定义异步方法  采用优雅降级</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">Promise</span> !== <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">  <span class="comment">// 如果支持promise</span></span><br><span class="line">  <span class="keyword">const</span> p = <span class="title class_">Promise</span>.<span class="title function_">resolve</span>();</span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    p.<span class="title function_">then</span>(flushCallbacks);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">MutationObserver</span> !== <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">  <span class="comment">// MutationObserver 主要是监听dom变化 也是一个异步方法</span></span><br><span class="line">  <span class="keyword">let</span> counter = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="title class_">MutationObserver</span>(flushCallbacks);</span><br><span class="line">  <span class="keyword">const</span> textNode = <span class="variable language_">document</span>.<span class="title function_">createTextNode</span>(<span class="title class_">String</span>(counter));</span><br><span class="line">  observer.<span class="title function_">observe</span>(textNode, &#123;</span><br><span class="line">    <span class="attr">characterData</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    counter = (counter + <span class="number">1</span>) % <span class="number">2</span>;</span><br><span class="line">    textNode.<span class="property">data</span> = <span class="title class_">String</span>(counter);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> setImmediate !== <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">  <span class="comment">// 如果前面都不支持 判断setImmediate</span></span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">setImmediate</span>(flushCallbacks);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="comment">// 最后降级采用setTimeout</span></span><br><span class="line">  timerFunc = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(flushCallbacks, <span class="number">0</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">nextTick</span>(<span class="params">cb</span>) &#123;</span><br><span class="line">  <span class="comment">// 除了渲染watcher  还有用户自己手动调用的nextTick 一起被收集到数组</span></span><br><span class="line">  callbacks.<span class="title function_">push</span>(cb);</span><br><span class="line">  <span class="keyword">if</span> (!pending) &#123;</span><br><span class="line">    <span class="comment">// 如果多次调用nextTick  只会执行一次异步 等异步队列清空之后再把标志变为false</span></span><br><span class="line">    pending = <span class="literal">true</span>;</span><br><span class="line">    <span class="title function_">timerFunc</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="17-Vue-set-方法原理"><a href="#17-Vue-set-方法原理" class="headerlink" title="17. Vue.set 方法原理"></a>17. Vue.set 方法原理</h3><p>在 Vue.js 中，Vue.set() 方法用于向响应式对象中添加新的属性或更新现有属性。这个方法可以确保响应式对象中新增或修改的属性也是响应式的，从而能够触发视图的更新。</p>
+<p>实际上，Vue.set() 方法内部会检测目标对象是否为响应式对象，并且会使用 Vue.js 内置的响应式系统来添加或更新属性。如果目标对象不是响应式对象，则会将其转换为响应式对象，然后再进行添加或更新操作。</p>
+<p>接下来，Vue.js 会在目标对象上调用 Object.defineProperty() 方法，以设置新的属性或更新现有属性。在这个过程中，Vue.js 会利用 Object.defineProperty() 方法提供的属性描述符，来确保新的属性也是响应式的。</p>
+<p>总之，Vue.set() 方法是Vue.js用于向响应式对象中添加新的属性或更新现有属性的一种机制。通过检测目标对象是否为响应式对象，并利用 Vue.js 内置的响应式系统来添加或更新属性，Vue.set() 方法确保了新的属性也是响应式的，从而能够触发视图的更新。</p>
+<p>相关代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">set</span>(<span class="params">target: <span class="built_in">Array</span> | <span class="built_in">Object</span>, key: any, val: any</span>): any &#123;</span><br><span class="line">  <span class="comment">// 如果是数组 调用我们重写的splice方法 (这样可以更新视图)</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(target) &amp;&amp; <span class="title function_">isValidArrayIndex</span>(key)) &#123;</span><br><span class="line">    target.<span class="property">length</span> = <span class="title class_">Math</span>.<span class="title function_">max</span>(target.<span class="property">length</span>, key);</span><br><span class="line">    target.<span class="title function_">splice</span>(key, <span class="number">1</span>, val);</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 如果是对象本身的属性，则直接添加即可</span></span><br><span class="line">  <span class="keyword">if</span> (key <span class="keyword">in</span> target &amp;&amp; !(key <span class="keyword">in</span> <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>)) &#123;</span><br><span class="line">    target[key] = val;</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> ob = (<span class="attr">target</span>: any).<span class="property">__ob__</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果不是响应式的也不需要将其定义成响应式属性</span></span><br><span class="line">  <span class="keyword">if</span> (!ob) &#123;</span><br><span class="line">    target[key] = val;</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 将属性定义成响应式的</span></span><br><span class="line">  <span class="title function_">defineReactive</span>(ob.<span class="property">value</span>, key, val);</span><br><span class="line">  <span class="comment">// 通知视图更新</span></span><br><span class="line">  ob.<span class="property">dep</span>.<span class="title function_">notify</span>();</span><br><span class="line">  <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="18-Vue-模板编译原理"><a href="#18-Vue-模板编译原理" class="headerlink" title="18. Vue 模板编译原理"></a>18. Vue 模板编译原理</h3><p>Vue 的编译过程就是将 template 转化为 render 函数的过程 分为以下三步</p>
+<ul>
+<li><p>1.将模板解析成 AST（抽象语法树）。AST 是一个树形结构，用于表示模板的语法结构和逻辑关系。</p>
+</li>
+<li><p>2.将 AST 转换成可执行的渲染函数。在这个过程中，会使用一些优化技巧来提高渲染函数的性能和效率。</p>
+</li>
+<li><p>3.将渲染函数和响应式数据关联起来，使得当响应式数据发生变化时，Vue.js 可以自动更新视图。</p>
+</li>
+</ul>
+<p>具体来说，模板编译的原理如下：</p>
+<p><code>解析模板</code>：Vue.js 会使用正则表达式等方法来解析模板，并将其转换成 AST。在这个过程中，会识别出各种语法结构，例如指令、插值、属性绑定等。</p>
+<p><code>静态分析</code>：Vue.js 会对 AST 进行静态分析，以确定每个节点的依赖关系和属性。同时，Vue.js 会检查模板是否存在语法错误或潜在的运行时错误，并生成相应的警告或错误信息。</p>
+<p><code>代码生成</code>：根据 AST 生成可执行的渲染函数。在这个过程中，会使用一些优化技巧来提高渲染函数的性能和效率，例如缓存中间结果、避免不必要的计算等。</p>
+<p><code>关联数据</code>：将渲染函数和响应式数据关联起来。在这个过程中，Vue.js 会使用响应式系统来监听数据的变化，并根据需要更新视图。</p>
+
               </div>
 
               
