@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="JenkinWoo">
+
+
+    <meta name="subtitle" content="JenkinWoo">
+
+
+    <meta name="description" content="JenkinWoo">
+
+
+    <meta name="keywords" content="JenkinWoo, 前端">
+
+
+<title>Google Chrome 109.0.5414.120 正式版（Win7、8 最后支持的版本) 附送官方直链下载地址 | JenkinWoo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/cursorHeart.min.js"></script>
+    
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            const mobiletoggle = document.getElementById("mobile-toggle-theme")
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Dark")
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Light")
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JenkinWoo&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JenkinWoo&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+  
+    
+      <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">跳转最后</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? "展开全部" : "全部收缩";
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+        
+          
+            <article class="post-wrap">
+              <header class="post-header">
+                <h1 class="post-title">
+                  Google Chrome 109.0.5414.120 正式版（Win7、8 最后支持的版本) 附送官方直链下载地址
+                </h1>
+              </header>
+
+              <div class="post-content">
+                <p>谷歌浏览器v109正式版主要更新，Chrome 109将是最后一个支持 <code>Windows 7</code>和<code>Windows 8.1</code>的版本。2023年1月10日起，微软将不再为Windows 7&#x2F;Windows 8.1系统的专业版和企业版提供扩展安全更新。与此同时，谷歌也宣布在Chrome 109版本之后停止支持Windows 7&#x2F;8.1系统。</p>
+<h2 id="安全修复"><a href="#安全修复" class="headerlink" title="安全修复"></a>安全修复</h2><p>chromereleases.googleblog.com</p>
+<p>Chrome v109.0.5414.120，此更新包括6个安全修复程序。<br>[$16000][1376354] High CVE-2023-0471: Use after free in WebTransport. Reported by chichoo Kim(chichoo) and Cassidy Kim(@cassidy6564) on 2022-10-19<br>[$3000][1405256] High CVE-2023-0472: Use after free in WebRTC. Reported by Cassidy Kim(@cassidy6564) on 2023-01-06<br>[$7500][1404639] Medium CVE-2023-0473: Type Confusion in ServiceWorker API. Reported by raven at KunLun lab on 2023-01-03<br>[$TBD][1400841] Medium CVE-2023-0474: Use after free in GuestView. Reported by avaue at S.S.L on 2022-12-14<br>[1409890] Various fixes from internal audits, fuzzing and other initiatives</p>
+<h2 id="下载地址"><a href="#下载地址" class="headerlink" title="下载地址"></a>下载地址</h2><p>离线安装包“无更新组件”版提取原生绿色版方法：<br>鼠标右键解压离线安装包，此时会解压出来一个chrome.7z<br>再对chrome.7z解压就是原生绿色版啦！<br>离线安装包“无更新组件”版不含在线更新升级功能，所以不会添加更新计划任务，也没有后台更新进程，更干净。</p>
+<p>Google Chrome v109.0.5414.120 官方正式版 离线安装包</p>
+<p>Windows版（无更新组件）64位<br><a target="_blank" rel="noopener" href="https://dl.google.com/release2/chrome/czao2hrvpk5wgqrkz4kks5r734_109.0.5414.120/109.0.5414.120_chrome_installer.exe">https://dl.google.com/release2/chrome/czao2hrvpk5wgqrkz4kks5r734_109.0.5414.120/109.0.5414.120_chrome_installer.exe</a><br><a target="_blank" rel="noopener" href="https://www.google.com/dl/release2/chrome/czao2hrvpk5wgqrkz4kks5r734_109.0.5414.120/109.0.5414.120_chrome_installer.exe">https://www.google.com/dl/release2/chrome/czao2hrvpk5wgqrkz4kks5r734_109.0.5414.120/109.0.5414.120_chrome_installer.exe</a><br><a target="_blank" rel="noopener" href="https://edgedl.me.gvt1.com/edgedl/release2/chrome/czao2hrvpk5wgqrkz4kks5r734_109.0.5414.120/109.0.5414.120_chrome_installer.exe">https://edgedl.me.gvt1.com/edgedl/release2/chrome/czao2hrvpk5wgqrkz4kks5r734_109.0.5414.120/109.0.5414.120_chrome_installer.exe</a></p>
+<p>Windows版（无更新组件）32位<br><a target="_blank" rel="noopener" href="https://dl.google.com/release2/chrome/acihtkcueyye3ymoj2afvv7ulzxa_109.0.5414.120/109.0.5414.120_chrome_installer.exe">https://dl.google.com/release2/chrome/acihtkcueyye3ymoj2afvv7ulzxa_109.0.5414.120/109.0.5414.120_chrome_installer.exe</a><br><a target="_blank" rel="noopener" href="https://www.google.com/dl/release2/chrome/acihtkcueyye3ymoj2afvv7ulzxa_109.0.5414.120/109.0.5414.120_chrome_installer.exe">https://www.google.com/dl/release2/chrome/acihtkcueyye3ymoj2afvv7ulzxa_109.0.5414.120/109.0.5414.120_chrome_installer.exe</a><br><a target="_blank" rel="noopener" href="https://edgedl.me.gvt1.com/edgedl/release2/chrome/acihtkcueyye3ymoj2afvv7ulzxa_109.0.5414.120/109.0.5414.120_chrome_installer.exe">https://edgedl.me.gvt1.com/edgedl/release2/chrome/acihtkcueyye3ymoj2afvv7ulzxa_109.0.5414.120/109.0.5414.120_chrome_installer.exe</a></p>
+<p>MAC版（无更新组件） 109.0.5414.119<br><a target="_blank" rel="noopener" href="https://dl.google.com/release2/chrome/byjmkkfmpb7n2rtq2ht7ynu4ke_109.0.5414.119/GoogleChrome-109.0.5414.119.dmg">https://dl.google.com/release2/chrome/byjmkkfmpb7n2rtq2ht7ynu4ke_109.0.5414.119/GoogleChrome-109.0.5414.119.dmg</a><br><a target="_blank" rel="noopener" href="https://www.google.com/dl/release2/chrome/byjmkkfmpb7n2rtq2ht7ynu4ke_109.0.5414.119/GoogleChrome-109.0.5414.119.dmg">https://www.google.com/dl/release2/chrome/byjmkkfmpb7n2rtq2ht7ynu4ke_109.0.5414.119/GoogleChrome-109.0.5414.119.dmg</a><br><a target="_blank" rel="noopener" href="https://edgedl.me.gvt1.com/edgedl/release2/chrome/byjmkkfmpb7n2rtq2ht7ynu4ke_109.0.5414.119/GoogleChrome-109.0.5414.119.dmg">https://edgedl.me.gvt1.com/edgedl/release2/chrome/byjmkkfmpb7n2rtq2ht7ynu4ke_109.0.5414.119/GoogleChrome-109.0.5414.119.dmg</a></p>
+<p>Windows版（含更新组件）64位<br><a target="_blank" rel="noopener" href="https://dl.google.com/update2/installers/ChromeStandaloneSetup64.exe">https://dl.google.com/update2/installers/ChromeStandaloneSetup64.exe</a><br><a target="_blank" rel="noopener" href="https://dl.google.com/tag/s/installdataindex/update2/installers/ChromeStandaloneSetup64.exe">https://dl.google.com/tag/s/installdataindex/update2/installers/ChromeStandaloneSetup64.exe</a></p>
+<p>Windows版（含更新组件）32位<br><a target="_blank" rel="noopener" href="https://dl.google.com/update2/installers/ChromeStandaloneSetup.exe">https://dl.google.com/update2/installers/ChromeStandaloneSetup.exe</a><br><a target="_blank" rel="noopener" href="https://dl.google.com/tag/s/installdataindex/update2/installers/ChromeStandaloneSetup.exe">https://dl.google.com/tag/s/installdataindex/update2/installers/ChromeStandaloneSetup.exe</a></p>
+<p>Windows Enterprise企业版（含更新组件）64位<br>谷歌浏览器企业版是针对企业用户开发的一款浏览器<br><a target="_blank" rel="noopener" href="https://dl.google.com/chrome/install/GoogleChromeEnterpriseBundle64.zip">https://dl.google.com/chrome/install/GoogleChromeEnterpriseBundle64.zip</a><br><a target="_blank" rel="noopener" href="https://dl.google.com/edgedl/chrome/install/GoogleChromeStandaloneEnterprise64.msi">https://dl.google.com/edgedl/chrome/install/GoogleChromeStandaloneEnterprise64.msi</a></p>
+<p>Windows Enterprise企业版（含更新组件）32位<br><a target="_blank" rel="noopener" href="https://dl.google.com/chrome/install/GoogleChromeEnterpriseBundle.zip">https://dl.google.com/chrome/install/GoogleChromeEnterpriseBundle.zip</a><br><a target="_blank" rel="noopener" href="https://dl.google.com/edgedl/chrome/install/GoogleChromeStandaloneEnterprise.msi">https://dl.google.com/edgedl/chrome/install/GoogleChromeStandaloneEnterprise.msi</a></p>
+<p>MAC版<br><a target="_blank" rel="noopener" href="https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg">https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg</a><br><a target="_blank" rel="noopener" href="https://dl.google.com/chrome/mac/stable/GCEA/googlechrome.dmg">https://dl.google.com/chrome/mac/stable/GCEA/googlechrome.dmg</a></p>
+<p>Linux版<br><a target="_blank" rel="noopener" href="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb">https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb</a><br><a target="_blank" rel="noopener" href="https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm">https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm</a></p>
+
+              </div>
+
+              
+                <section class="post-copyright">
+                  
+                    <p class="copyright-item">
+                      <span>
+                        作者:
+                      </span>
+                      <span>JenkinWoo</span>
+                    </p>
+                  
+                     
+                  
+                    <p class="copyright-item">
+                      <span>
+                        日期:
+                      </span>
+                      <span>04/23, 2023&nbsp;&nbsp;11:29:00</span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        分类:
+                      </span>
+                      <span>
+                        
+                          <a href="/categories/Chrome/">Chrome</a>
+                          
+                      </span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        归档:
+                      </span>
+                      <span><a href="https://www.2ms.cc/2023/04/3e437f5dcfbe.html">https://www.2ms.cc/2023/04/3e437f5dcfbe.html</a></span>
+                    </p>
+                  
+                </section>
+              
+                <section class="post-tags">
+                  <div>
+                    <span>Tag(s):</span>
+                    <span class="tag">
+                      
+                        
+                          <a href="/tags/Chrome/"># Chrome</a>
+                        
+                          <a href="/tags/Chrome-%E4%B8%8B%E8%BD%BD/"># Chrome 下载</a>
+                        
+                      
+                    </span>
+                  </div>
+                  <div>
+                    <a href="javascript:window.history.back();">back</a>
+                    <span>· </span>
+                    <a href="/">home</a>
+                  </div>
+                </section>
+                <section class="post-nav">
+                  
+                  
+                    <a class="next" rel="next" href="/2023/04/3f2cc34eee81.html">Hexo插件之百度主动推送链接地址</a>
+                  
+                </section>
+            </article>
+</div>
+            </div>
+            
+              <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© JenkinWoo</span>
+    </div>
+</footer>
+
+            
+    </div>
+</body>
+
+</html>
