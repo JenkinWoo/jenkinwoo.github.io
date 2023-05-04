@@ -213,7 +213,18 @@
 
               <div class="post-content">
                 <p>排序算法可以分为内部排序和外部排序，内部排序是数据记录在内存中进行排序，而外部排序是因排序的数据很大，一次不能容纳全部的排序记录，在排序过程中需要访问外存。常见的内部排序算法有：<code>插入排序</code>、<code>希尔排序</code>、<code>选择排序</code>、<code>冒泡排序</code>、<code>归并排序</code>、<code>快速排序</code>、<code>堆排序</code>、<code>基数排序</code>等。</p>
-<h2 id="1-冒泡排序"><a href="#1-冒泡排序" class="headerlink" title="1. 冒泡排序"></a>1. 冒泡排序</h2><p>  冒泡排序（Bubble Sort）也是一种简单直观的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢”浮”到数列的顶端。</p>
+<h2 id="一、-冒泡排序"><a href="#一、-冒泡排序" class="headerlink" title="一、 冒泡排序"></a>一、 冒泡排序</h2><p>  冒泡排序（Bubble Sort）也是一种简单直观的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢”浮”到数列的顶端。</p>
+<ol>
+<li>算法步骤</li>
+<li>动图演示</li>
+</ol>
+<pre><code>![](bubbleSort.gif)
+</code></pre>
+<ol start="3">
+<li>代码实现</li>
+</ol>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">bubbleSort</span>(<span class="params">arr</span>) &#123;</span><br><span class="line"><span class="keyword">var</span> len = arr.<span class="property">length</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len - <span class="number">1</span>; i++) &#123;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; len - <span class="number">1</span> - i; j++) &#123;</span><br><span class="line"><span class="keyword">if</span> (arr[j] &gt; arr[j+<span class="number">1</span>]) &#123;        <span class="comment">// 相邻元素两两对比</span></span><br><span class="line"><span class="keyword">var</span> temp = arr[j+<span class="number">1</span>];        <span class="comment">// 元素交换</span></span><br><span class="line">arr[j+<span class="number">1</span>] = arr[j];</span><br><span class="line">arr[j] = temp;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
 
               </div>
 
@@ -300,6 +311,8 @@
                   </div>
                 </section>
                 <section class="post-nav">
+                  
+                    <a class="prev" rel="prev" href="/2023/05/eb2c611551ae.html">的骄傲扣税的</a>
                   
                   
                     <a class="next" rel="next" href="/2023/05/6a17e412f43e.html">常用 Git 命令清单</a>
