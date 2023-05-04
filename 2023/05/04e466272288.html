@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="JenkinWoo">
+
+
+    <meta name="subtitle" content="JenkinWoo">
+
+
+    <meta name="description" content="JenkinWoo">
+
+
+    <meta name="keywords" content="JenkinWoo, 前端">
+
+
+<title>常见排序算法（Javascript版本) | JenkinWoo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/cursorHeart.min.js"></script>
+    
+
+
+
+
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?45f0f1cf70af2822b070790f1a862607";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            const mobiletoggle = document.getElementById("mobile-toggle-theme")
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Dark")
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Light")
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JenkinWoo&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JenkinWoo&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+  
+    
+      <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">跳转最后</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? "展开全部" : "全部收缩";
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+        
+          
+            <article class="post-wrap">
+              <header class="post-header">
+                <h1 class="post-title">
+                  常见排序算法（Javascript版本)
+                </h1>
+              </header>
+
+              <div class="post-content">
+                <p>排序算法可以分为内部排序和外部排序，内部排序是数据记录在内存中进行排序，而外部排序是因排序的数据很大，一次不能容纳全部的排序记录，在排序过程中需要访问外存。常见的内部排序算法有：<code>插入排序</code>、<code>希尔排序</code>、<code>选择排序</code>、<code>冒泡排序</code>、<code>归并排序</code>、<code>快速排序</code>、<code>堆排序</code>、<code>基数排序</code>等。</p>
+<h2 id="1-冒泡排序"><a href="#1-冒泡排序" class="headerlink" title="1. 冒泡排序"></a>1. 冒泡排序</h2><p>  冒泡排序（Bubble Sort）也是一种简单直观的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢”浮”到数列的顶端。</p>
+
+              </div>
+
+              
+                <section class="post-copyright">
+                  
+                    <p class="copyright-item">
+                      <span>
+                        作者:
+                      </span>
+                      <span>JenkinWoo</span>
+                    </p>
+                  
+                     
+                  
+                    <p class="copyright-item">
+                      <span>
+                        日期:
+                      </span>
+                      <span>05/4, 2023&nbsp;&nbsp;15:31:13</span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        分类:
+                      </span>
+                      <span>
+                        
+                          <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                          
+                      </span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        归档:
+                      </span>
+                      <span><a href="https://www.2ms.cc/2023/05/04e466272288.html">https://www.2ms.cc/2023/05/04e466272288.html</a></span>
+                    </p>
+                  
+                </section>
+              
+                <section class="post-tags">
+                  <div>
+                    <span>Tag(s):</span>
+                    <span class="tag">
+                      
+                        
+                          <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/"># 排序算法</a>
+                        
+                          <a href="/tags/%E7%BB%8F%E5%85%B8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/"># 经典排序算法</a>
+                        
+                          <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/"># 冒泡排序</a>
+                        
+                          <a href="/tags/%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/"># 选择排序</a>
+                        
+                          <a href="/tags/%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/"># 插入排序</a>
+                        
+                          <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/"># 希尔排序</a>
+                        
+                          <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/"># 归并排序</a>
+                        
+                          <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/"># 快速排序</a>
+                        
+                          <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/"># 堆排序</a>
+                        
+                          <a href="/tags/%E8%AE%A1%E6%95%B0%E6%8E%92%E5%BA%8F/"># 计数排序</a>
+                        
+                          <a href="/tags/%E6%A1%B6%E6%8E%92%E5%BA%8F/"># 桶排序</a>
+                        
+                          <a href="/tags/%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F/"># 基数排序</a>
+                        
+                      
+                    </span>
+                  </div>
+                  <div>
+                    <a href="javascript:window.history.back();">back</a>
+                    <span>· </span>
+                    <a href="/">home</a>
+                  </div>
+                </section>
+                <section class="post-nav">
+                  
+                  
+                    <a class="next" rel="next" href="/2023/05/6a17e412f43e.html">常用 Git 命令清单</a>
+                  
+                </section>
+            </article>
+</div>
+            </div>
+            
+              <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© JenkinWoo</span>
+    </div>
+</footer>
+
+            
+    </div>
+</body>
+
+</html>
