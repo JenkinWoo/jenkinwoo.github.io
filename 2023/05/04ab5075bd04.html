@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="JenkinWoo">
+
+
+    <meta name="subtitle" content="JenkinWoo">
+
+
+    <meta name="description" content="JenkinWoo">
+
+
+    <meta name="keywords" content="JenkinWoo, 前端">
+
+
+<title>Vue2中放弃实现数组的响应式的背后原因 | JenkinWoo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/cursorHeart.min.js"></script>
+    
+
+
+
+
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?45f0f1cf70af2822b070790f1a862607";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            const mobiletoggle = document.getElementById("mobile-toggle-theme")
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Dark")
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Light")
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JenkinWoo&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JenkinWoo&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+  
+    
+      <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">跳转最后</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? "展开全部" : "全部收缩";
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+        
+          
+            <article class="post-wrap">
+              <header class="post-header">
+                <h1 class="post-title">
+                  Vue2中放弃实现数组的响应式的背后原因
+                </h1>
+              </header>
+
+              <div class="post-content">
+                <blockquote>
+<p>拓展：数据的双向绑定原理</p>
+<p>主要是通过observe函数对所有数据遍历，同时加上set，get方法，这样就能通过Object.defineProperty()劫持set、get。通过解析器对数据解析, 初始化之后会渲染页面，同时添加Watcher订阅者监听数据的变化.一旦数据变化就会立即收到通知，并且更新视图—(ps：Watch里面会在实例化的Dep中通过notice通知，从而调用update()触发数据更新)</p>
+</blockquote>
+<h3 id="不监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应"><a href="#不监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应" class="headerlink" title="不监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应"></a>不监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应</h3><p>一、因为数组的位置不固定，数量多变，正常对象key对应value一般不会变，但是如果数组删除了某个元素，比如第一个元素被删除或者头部增加一个元素，那么将导致后面所有的key对应value错位，如果6个元素，也就会触发5次set。<br>二、数组元素可能非常非常多，每个元素进行劫持有一定浪费，这可能是Evan you对性能的考虑。<br>三、Vue将数组的7个变异方法进行了重写，也就是更改了Array原型上的方法达到劫持变化。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> arr) &#123;</span><br><span class="line">  <span class="keyword">let</span> value = arr[key]</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(arr, key, &#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`get: <span class="subst">$&#123;key&#125;</span>`</span>)</span><br><span class="line">      <span class="keyword">return</span> value</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">newValue</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`set: <span class="subst">$&#123;key&#125;</span> to <span class="subst">$&#123;newValue&#125;</span>`</span>)</span><br><span class="line">      <span class="keyword">return</span> value = newValue</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">1</span> <span class="comment">// 打印：set：0 to 1</span></span><br><span class="line">arr[<span class="number">3</span>] <span class="comment">// 打印：get：3</span></span><br><span class="line">arr.<span class="title function_">shift</span>() <span class="comment">// 会导致5次前移，所以产生5次get和5次set</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  get: 1</span></span><br><span class="line"><span class="comment">  set: 0 to 2</span></span><br><span class="line"><span class="comment">  get: 2</span></span><br><span class="line"><span class="comment">  set: 1 to 3</span></span><br><span class="line"><span class="comment">  get: 3</span></span><br><span class="line"><span class="comment">  set: 2 to 4</span></span><br><span class="line"><span class="comment">  get: 4</span></span><br><span class="line"><span class="comment">  set: 3 to 5</span></span><br><span class="line"><span class="comment">  get: 5</span></span><br><span class="line"><span class="comment">  set: 4 to 6</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Proxy虽然是劫持的整个对象，但也是浅层劫持，属性值是对象时同样也需要深度遍历，不然该属性对象的变化也无法监测到。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">user</span>: &#123; <span class="attr">name</span>: <span class="string">&#x27;JavaScript&#x27;</span>, <span class="attr">age</span>: <span class="number">22</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxyObj = <span class="keyword">new</span> <span class="title class_">Proxy</span>(obj, &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`get：<span class="subst">$&#123;key&#125;</span>`</span>)</span><br><span class="line">    <span class="keyword">return</span> target[key]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">set</span>(<span class="params">target, key, value</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`set：<span class="subst">$&#123;key&#125;</span> to <span class="subst">$&#123;value&#125;</span>`</span>)</span><br><span class="line">    <span class="keyword">return</span> target[key] = value</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">proxyObj.<span class="property">user</span>.<span class="property">name</span> = <span class="string">&#x27;JenkinWoo&#x27;</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  get：user</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p>当递归进行深度拦截</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">deepProxy</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(obj, &#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`get：<span class="subst">$&#123;key&#125;</span>`</span>)</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> target[key] === <span class="string">&#x27;object&#x27;</span> &amp;&amp; target[key] !== <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">deepProxy</span>(target[key])   <span class="comment">// 递归劫持</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> target[key]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">target, key, value</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`set：<span class="subst">$&#123;key&#125;</span> to <span class="subst">$&#123;value&#125;</span>`</span>)</span><br><span class="line">      <span class="keyword">return</span> target[key] = value</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">count</span>: <span class="number">5</span>,</span><br><span class="line">  <span class="attr">user</span>: &#123; <span class="attr">name</span>: <span class="string">&#x27;JenkinWoo&#x27;</span>, <span class="attr">age</span>: <span class="number">22</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">const</span> proxyObj = <span class="title function_">deepProxy</span>(obj)</span><br><span class="line">proxyObj.<span class="property">user</span>.<span class="property">name</span> = <span class="string">&#x27;JenkinWoo&#x27;</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  get：user</span></span><br><span class="line"><span class="comment">  set：name to JenkinWoo</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>所以为什么proxy优于Object.defineProperty？</strong></p>
+<p>从以上的例子就能看到，Object.defineProperty必须“预先”劫持属性。被劫持的属性才会被监听到。所以后添加的属性，需要手动再次劫持。</p>
+<p>而proxy代理了整个对象，不需要预先劫持属性，而是在获取&#x2F;修改的时候，通过get&#x2F;set方法来告诉你key。所以不管如何新增属性，总是能被捕获到。</p>
+
+              </div>
+
+              
+                <section class="post-copyright">
+                  
+                    <p class="copyright-item">
+                      <span>
+                        作者:
+                      </span>
+                      <span>JenkinWoo</span>
+                    </p>
+                  
+                     
+                  
+                    <p class="copyright-item">
+                      <span>
+                        日期:
+                      </span>
+                      <span>05/23, 2023&nbsp;&nbsp;11:11:00</span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        分类:
+                      </span>
+                      <span>
+                        
+                          <a href="/categories/Vue/">Vue</a>
+                          
+                      </span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        归档:
+                      </span>
+                      <span><a href="https://www.2ms.cc/2023/05/04ab5075bd04.html">https://www.2ms.cc/2023/05/04ab5075bd04.html</a></span>
+                    </p>
+                  
+                </section>
+              
+                <section class="post-tags">
+                  <div>
+                    <span>Tag(s):</span>
+                    <span class="tag">
+                      
+                        
+                          <a href="/tags/Vue/"># Vue</a>
+                        
+                      
+                    </span>
+                  </div>
+                  <div>
+                    <a href="javascript:window.history.back();">back</a>
+                    <span>· </span>
+                    <a href="/">home</a>
+                  </div>
+                </section>
+                <section class="post-nav">
+                  
+                  
+                    <a class="next" rel="next" href="/2023/05/04e466272288.html">常见排序算法（Javascript版本)</a>
+                  
+                </section>
+            </article>
+</div>
+            </div>
+            
+              <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© JenkinWoo</span>
+    </div>
+</footer>
+
+            
+    </div>
+</body>
+
+</html>
