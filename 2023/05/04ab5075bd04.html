@@ -302,21 +302,21 @@
                   
                 </section>
             </article>
+            
+            
+              <div id="waline"></div>
+                      
 </div>
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/@waline/client@v2/dist/waline.css"
-  />
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
 
-  <script type="module">
-    import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
-
-    init({
-      el: '#waline',
-      serverURL: 'https://blog-waline-rosy-nu.vercel.app',
-    });
-  </script>
+  init({
+    el: '#waline',
+    serverURL: 'https://blog-waline-rosy-nu.vercel.app',
+  });
+</script>
             </div>
             
               <footer id="footer" class="footer">
