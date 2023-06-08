@@ -1083,6 +1083,9 @@ header label {
 .tag:not(:last-child) a::after {
   content: " / ";
 }
+.post-waline {
+  clear: both;
+}
 .post-toc {
   position: fixed;
   top: 95px;
