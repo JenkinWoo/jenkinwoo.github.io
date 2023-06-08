@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="JenkinWoo">
+
+
+    <meta name="subtitle" content="JenkinWoo">
+
+
+    <meta name="description" content="JenkinWoo">
+
+
+    <meta name="keywords" content="JenkinWoo, 前端">
+
+
+<title>WebRTC 简介 | JenkinWoo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+    <script src="/js/cursorHeart.min.js"></script>
+    
+
+
+
+
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?45f0f1cf70af2822b070790f1a862607";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            const mobiletoggle = document.getElementById("mobile-toggle-theme")
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Dark")
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                mobiletoggle && (mobiletoggle.innerText = "· Light")
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JenkinWoo&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JenkinWoo&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; 菜单</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文章</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tag">标签</a>
+                
+                    <a class="menu-item" href="/about">关于</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+  
+    
+      <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">展开全部</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">跳转最后</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? "展开全部" : "全部收缩";
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+        
+          
+            <article class="post-wrap">
+              <header class="post-header">
+                <h1 class="post-title">
+                  WebRTC 简介
+                </h1>
+              </header>
+
+              <div class="post-content">
+                <h2 id="WebRTC-是什么？"><a href="#WebRTC-是什么？" class="headerlink" title="WebRTC 是什么？"></a>WebRTC 是什么？</h2><p>WebRTC的诞生可以追溯到20世纪90年代，当时GIPS（Global IP Solutions）公司开始研究IP音频和视频通讯技术。2005年，GIPS推出了自己的音视频编解码库，并成为Google Talk等应用程序的关键组件。</p>
+<p>2010年，Google收购了GIPS，并开始将其技术整合到Chrome浏览器中。随后，在2011年Google推出了WebRTC项目，旨在通过网页浏览器实现点对点的实时音视频通讯，以取代传统的插件式技术。</p>
+<p>WebRTC是一种实时通信技术，能够在网页浏览器中实现点对点的音频、视频和数据传输。它是一个自由、开放源代码项目，并已成为HTML5标准的一部分。WebRTC使用了多种技术和协议，例如WebSockets、STUN、TURN和SRTP等，以提供高质量的实时通信服务。WebRTC可用于许多应用程序，例如音视频会议、远程协作和在线教育等。</p>
+<p>WebRTC项目既由Google主导，也得到了IETF（Internet Engineering Task Force）和W3C（World Wide Web Consortium）等组织的支持和参与。</p>
+<p>IETF是一个开放的国际组织，负责制定互联网相关技术标准。在WebRTC的开发中，IETF制定了如ICE、STUN、TURN等协议，这些协议对于WebRTC的实现起着重要的作用。此外，IETF还负责审核和批准WebRTC的相关标准。</p>
+<p>W3C是一个非营利性的国际组织，致力于推动Web技术的发展和标准化。在WebRTC的开发中，W3C起着关键的角色，负责制定WebRTC相关API和规范，以确保WebRTC可以被各种浏览器正确地支持和使用。</p>
+<p>通过IETF和W3C的支持和参与，WebRTC可以得到更广泛的认可和应用，并且可以遵循通用的标准和规范。同时，这也有助于促进WebRTC在互联网上的普及和使用。</p>
+<ul>
+<li><p>IETF 工作组 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/wg/rtcweb/documents/">rtcweb</a></p>
+</li>
+<li><p>API 的 W3C 文档 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/webrtc/">webrtc</a>。</p>
+</li>
+</ul>
+<h2 id="为什么选择-WebRTC？"><a href="#为什么选择-WebRTC？" class="headerlink" title="为什么选择 WebRTC？"></a>为什么选择 WebRTC？</h2><ol>
+<li><p>点对点通信：WebRTC支持点对点通信，可以直接在用户之间建立连接，而不需要通过服务器中转。这意味着私有会议系统可以更加安全地进行，因为数据不会经过第三方服务器。</p>
+</li>
+<li><p>实时性能好：WebRTC专门设计用于实时通信，在音频和视频传输方面表现出色。使用WebRTC实现私有会议系统可以提供毫秒级的延迟特性。</p>
+</li>
+<li><p>跨平台性强：WebRTC是基于网页浏览器的技术，可以在不同的操作系统和设备上运行，而不需要安装任何额外的软件或插件。这使得私有会议系统的部署和使用变得非常方便。</p>
+</li>
+<li><p>开放标准：WebRTC是一个开放源代码项目，并已成为HTML5标准的一部分。这意味着它可以轻松集成到其他应用程序中，并且具有较高的互操作性和可扩展性。</p>
+</li>
+</ol>
+<p>WebRTC是一个非常适合实现私有会议系统的技术，因为它提供了高质量、安全、跨平台和易于集成的解决方案。</p>
+<h2 id="学习-WebRTC-可以给我带来什么收益？"><a href="#学习-WebRTC-可以给我带来什么收益？" class="headerlink" title="学习 WebRTC 可以给我带来什么收益？"></a>学习 WebRTC 可以给我带来什么收益？</h2><ol>
+<li><p>未来职业机会：随着实时通信应用的普及，WebRTC技术已经成为许多公司的核心竞争力之一。学习WebRTC可以提高您在相关行业中的就业竞争力，并增加您未来的职业机会。</p>
+</li>
+<li><p>网络基础设施：WebRTC使用了多种技术和协议（如ICE、STUN和TURN等），以提供高质量的实时通信服务。学习WebRTC可以帮助您深入了解网络基础设施和网络安全。</p>
+</li>
+<li><p>Web开发技能：WebRTC是基于网页浏览器的技术，使用WebRTC可以帮助您深入了解网页开发，并掌握JavaScript、HTML和CSS等相关技术。</p>
+</li>
+<li><p>支持移动设备：WebRTC支持移动设备，可以在iOS和Android等移动操作系统上运行。这使得开发面向移动设备的实时通信应用程序变得更加容易。</p>
+</li>
+<li><p>探索新技术：随着WebRTC的不断发展，相关的新技术和标准也在不断涌现。学习WebRTC可以让您紧跟技术的最新动态，积极探索和应用新技术。</p>
+</li>
+</ol>
+
+              </div>
+
+              
+                <section class="post-copyright">
+                  
+                    <p class="copyright-item">
+                      <span>
+                        作者:
+                      </span>
+                      <span>JenkinWoo</span>
+                    </p>
+                  
+                     
+                  
+                    <p class="copyright-item">
+                      <span>
+                        日期:
+                      </span>
+                      <span>06/8, 2023&nbsp;&nbsp;13:23:12</span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        分类:
+                      </span>
+                      <span>
+                        
+                          <a href="/categories/WebRTC/">WebRTC</a>
+                          
+                      </span>
+                    </p>
+                  
+
+                  
+                    <p class="copyright-item">
+                      <span>
+                        归档:
+                      </span>
+                      <span><a href="https://www.2ms.cc/2023/06/467cf3f469cf.html">https://www.2ms.cc/2023/06/467cf3f469cf.html</a></span>
+                    </p>
+                  
+                </section>
+              
+                <section class="post-tags">
+                  <div>
+                    <span>Tag(s):</span>
+                    <span class="tag">
+                      
+                        
+                          <a href="/tags/WebRTC/"># WebRTC</a>
+                        
+                      
+                    </span>
+                  </div>
+                  <div>
+                    <a href="javascript:window.history.back();">back</a>
+                    <span>· </span>
+                    <a href="/">home</a>
+                  </div>
+                </section>
+                <section class="post-nav">
+                  
+                  
+                    <a class="next" rel="next" href="/2023/05/04ab5075bd04.html">Vue2中放弃实现数组的响应式的背后原因</a>
+                  
+                </section>
+            </article>
+</div>
+            </div>
+            
+              <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© JenkinWoo</span>
+    </div>
+</footer>
+
+            
+    </div>
+</body>
+
+</html>
