@@ -19,7 +19,7 @@
     <meta name="keywords" content="JenkinWoo, 前端">
 
 
-<title>一、WebRTC 简介 | JenkinWoo</title>
+<title>Centos8 新增一个ip地址，防止重启后丢失 | JenkinWoo</title>
 
 
 
@@ -207,61 +207,32 @@
             <article class="post-wrap">
               <header class="post-header">
                 <h1 class="post-title">
-                  一、WebRTC 简介
+                  Centos8 新增一个ip地址，防止重启后丢失
                 </h1>
               </header>
 
               <div class="post-content">
-                <h2 id="WebRTC-是什么？"><a href="#WebRTC-是什么？" class="headerlink" title="WebRTC 是什么？"></a>WebRTC 是什么？</h2><p>WebRTC的诞生可以追溯到20世纪90年代，当时GIPS（Global IP Solutions）公司开始研究IP音频和视频通讯技术。2005年，GIPS推出了自己的音视频编解码库，并成为Google Talk等应用程序的关键组件。</p>
-<p>2010年，Google收购了GIPS，并开始将其技术整合到Chrome浏览器中。随后，在2011年Google推出了WebRTC项目，旨在通过网页浏览器实现点对点的实时音视频通讯，以取代传统的插件式技术。</p>
-<p>WebRTC是一种实时通信技术，能够在网页浏览器中实现点对点的音频、视频和数据传输。它是一个自由、开放源代码项目，并已成为HTML5标准的一部分。WebRTC使用了多种技术和协议，例如WebSockets、STUN、TURN和SRTP等，以提供高质量的实时通信服务。WebRTC可用于许多应用程序，例如音视频会议、远程协作和在线教育等。</p>
-<p>WebRTC项目既由Google主导，也得到了IETF（Internet Engineering Task Force）和W3C（World Wide Web Consortium）等组织的支持和参与。</p>
-<p>IETF是一个开放的国际组织，负责制定互联网相关技术标准。在WebRTC的开发中，IETF制定了如ICE、STUN、TURN等协议，这些协议对于WebRTC的实现起着重要的作用。此外，IETF还负责审核和批准WebRTC的相关标准。</p>
-<p>W3C是一个非营利性的国际组织，致力于推动Web技术的发展和标准化。在WebRTC的开发中，W3C起着关键的角色，负责制定WebRTC相关API和规范，以确保WebRTC可以被各种浏览器正确地支持和使用。</p>
-<p>通过IETF和W3C的支持和参与，WebRTC可以得到更广泛的认可和应用，并且可以遵循通用的标准和规范。同时，这也有助于促进WebRTC在互联网上的普及和使用。</p>
+                <h2 id="使用脚本的方式进行创建"><a href="#使用脚本的方式进行创建" class="headerlink" title="使用脚本的方式进行创建"></a>使用脚本的方式进行创建</h2><p>在网上找到很多命令创建，可是重启服务器后，新增的ip地址都会丢失，于是我利用systemctl 服务来每次启动后自动附加ip地址，具体操作如下：</p>
 <ul>
-<li><p>IETF 工作组 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/wg/rtcweb/documents/">rtcweb</a></p>
-</li>
-<li><p>API 的 W3C 文档 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/webrtc/">webrtc</a>。</p>
-</li>
+<li>创建脚本文件，命名为 set_ip.sh</li>
 </ul>
-<h2 id="为什么选择-WebRTC？"><a href="#为什么选择-WebRTC？" class="headerlink" title="为什么选择 WebRTC？"></a>为什么选择 WebRTC？</h2><ol>
-<li><p>点对点通信：WebRTC支持点对点通信，可以直接在用户之间建立连接，而不需要通过服务器中转。这意味着私有会议系统可以更加安全地进行，因为数据不会经过第三方服务器。</p>
-</li>
-<li><p>实时性能好：WebRTC专门设计用于实时通信，在音频和视频传输方面表现出色。使用WebRTC实现私有会议系统可以提供毫秒级的延迟特性。</p>
-</li>
-<li><p>跨平台性强：WebRTC是基于网页浏览器的技术，可以在不同的操作系统和设备上运行，而不需要安装任何额外的软件或插件。这使得私有会议系统的部署和使用变得非常方便。</p>
-</li>
-<li><p>开放标准：WebRTC是一个开放源代码项目，并已成为HTML5标准的一部分。这意味着它可以轻松集成到其他应用程序中，并且具有较高的互操作性和可扩展性。</p>
-</li>
-</ol>
-<p>WebRTC是一个非常适合实现私有会议系统的技术，因为它提供了高质量、安全、跨平台和易于集成的解决方案。</p>
-<h2 id="WebRTC-应用场景"><a href="#WebRTC-应用场景" class="headerlink" title="WebRTC 应用场景"></a>WebRTC 应用场景</h2><ul>
-<li>网络会议<blockquote>
-<p>WebRTC可以提供高质量、低延迟的音视频传输服务, 参与者可以发送和接收多个流。他们还可以随时添加和删除这些流, 使得视频会议变得更加高效和便捷。</p>
-</blockquote>
-</li>
-<li>文件共享<blockquote>
-<p>DataChannel是WebRTC的一个子API，它提供了基于数据流的点对点通信能力，可用于传输任何类型的数据，包括文本、二进制文件等。</p>
-</blockquote>
-</li>
-<li>物联网（IoT）<blockquote>
-<p>WebRTC可以将实时音视频传输和物联网连接起来，为各种智能设备提供更加完整和高效的解决方案。通过WebRTC，用户可以轻松地控制和监控各种智能设备，并实现实时物联网应用程序。</p>
-</blockquote>
-</li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 脚本名称：set_ip.sh</span></span><br><span class="line"><span class="comment"># 功能：每次启动后自动附加IP地址</span></span><br><span class="line"><span class="comment"># 输入参数：IP地址</span></span><br><span class="line"><span class="comment"># 输出：无</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查输入参数数量</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$#</span>&quot;</span> -ne 1 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$0</span> &lt;ip_address&gt;&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取IP地址</span></span><br><span class="line">ip_address=<span class="variable">$1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 自动检测活动的网络接口</span></span><br><span class="line">interface=$(ip <span class="built_in">link</span> show up | grep -v lo | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> | sed <span class="string">&#x27;s/://g&#x27;</span> | <span class="built_in">head</span> -n 1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$interface</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;No active network interface found.&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态 IP 地址</span></span><br><span class="line">nmcli con mod <span class="string">&quot;<span class="variable">$interface</span>&quot;</span> ipv4.addresses <span class="string">&quot;<span class="variable">$ip_address</span>/24&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动网络连接</span></span><br><span class="line">nmcli connection up <span class="string">&quot;<span class="variable">$interface</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Static IP address <span class="variable">$ip_address</span> has been set for <span class="variable">$interface</span>&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>把文件保存到&#x2F;opt&#x2F;目录下，并赋予执行权限</p>
+<ul>
+<li>编写 systemctl服务</li>
 </ul>
-<h2 id="学习-WebRTC-可以给我带来什么收益？"><a href="#学习-WebRTC-可以给我带来什么收益？" class="headerlink" title="学习 WebRTC 可以给我带来什么收益？"></a>学习 WebRTC 可以给我带来什么收益？</h2><ol>
-<li><p>未来职业机会：随着实时通信应用的普及，WebRTC技术已经成为许多公司的核心竞争力之一。学习WebRTC可以提高您在相关行业中的就业竞争力，并增加您未来的职业机会。</p>
-</li>
-<li><p>网络基础设施：WebRTC使用了多种技术和协议（如ICE、STUN和TURN等），以提供高质量的实时通信服务。学习WebRTC可以帮助您深入了解网络基础设施和网络安全。</p>
-</li>
-<li><p>Web开发技能：WebRTC是基于网页浏览器的技术，使用WebRTC可以帮助您深入了解网页开发，并掌握JavaScript、HTML和CSS等相关技术。</p>
-</li>
-<li><p>支持移动设备：WebRTC支持移动设备，可以在iOS和Android等移动操作系统上运行。这使得开发面向移动设备的实时通信应用程序变得更加容易。</p>
-</li>
-<li><p>探索新技术：随着WebRTC的不断发展，相关的新技术和标准也在不断涌现。学习WebRTC可以让您紧跟技术的最新动态，积极探索和应用新技术。</p>
-</li>
-</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/systemd/system/set_ip.service</span><br></pre></td></tr></table></figure>
+
+<p>在文件中添加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line"><span class="comment"># 服务名称，可自定义</span></span><br><span class="line">Description = set_ip, nearby ip address</span><br><span class="line">After = network.target syslog.target</span><br><span class="line">Wants = network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type = simple</span><br><span class="line"><span class="comment"># 启动命令 /opt/set_ip.sh 替换为自己的目录 和 IP地址</span></span><br><span class="line">ExecStart = bash /opt/set_ip.sh 10.0.0.118</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy = multi-user.target</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动服务和开机启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start set_ip.service</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> set_ip.service</span><br></pre></td></tr></table></figure>
+
+<p>这样，每次重启服务器后，就会自动附加IP地址，可以使用命令 <code>ip addr</code> 查看当前IP地址。</p>
 
               </div>
 
@@ -281,7 +252,7 @@
                       <span>
                         日期:
                       </span>
-                      <span>06/8, 2023&nbsp;&nbsp;13:23:12</span>
+                      <span>12/28, 2023&nbsp;&nbsp;10:24:04</span>
                     </p>
                   
 
@@ -292,7 +263,7 @@
                       </span>
                       <span>
                         
-                          <a href="/categories/WebRTC/">WebRTC</a>
+                          <a href="/categories/npm/">npm</a>
                           
                       </span>
                     </p>
@@ -303,7 +274,7 @@
                       <span>
                         归档:
                       </span>
-                      <span><a href="https://www.2ms.cc/2023/06/467cf3f469cf.html">https://www.2ms.cc/2023/06/467cf3f469cf.html</a></span>
+                      <span><a href="https://www.2ms.cc/2023/12/5df3591587e1.html">https://www.2ms.cc/2023/12/5df3591587e1.html</a></span>
                     </p>
                   
                 </section>
@@ -314,7 +285,9 @@
                     <span class="tag">
                       
                         
-                          <a href="/tags/WebRTC/"># WebRTC</a>
+                          <a href="/tags/Centos/"># Centos</a>
+                        
+                          <a href="/tags/%E6%96%B0%E5%A2%9EIP%E5%9C%B0%E5%9D%80/"># 新增IP地址</a>
                         
                       
                     </span>
@@ -327,10 +300,8 @@
                 </section>
                 <section class="post-nav">
                   
-                    <a class="prev" rel="prev" href="/2023/12/51c2e71772ff.html">npm国内加速,修改镜像源及配置方法,解决npm install慢的问题</a>
                   
-                  
-                    <a class="next" rel="next" href="/2023/05/04ab5075bd04.html">Vue2中放弃实现数组的响应式的背后原因</a>
+                    <a class="next" rel="next" href="/2023/12/779523c74b72.html">彻底读懂前端跨域CORS</a>
                   
                 </section>
             </article>
